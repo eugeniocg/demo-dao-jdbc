@@ -52,18 +52,9 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 			rs=st.executeQuery();
 			if(rs.next()) {
 				
-				Departamento dep = new Departamento();
-				dep.setId(rs.getInt("IdDepartamento"));
-				dep.setNome(rs.getString("DepNome"));
-				
-				Funcionario funci = new Funcionario();
-				funci.setId(rs.getInt("Id"));
-				funci.setNome(rs.getString("Nome"));
-				funci.setEmail(rs.getString("Email"));
-				funci.setDataNascimento(rs.getDate("DataNascimento"));
-				funci.setSalarioBase(rs.getDouble("SalarioBase"));
-				funci.setDepartamento(dep);
-				
+				Departamento dep = instanciandoDepartamento(rs);
+				Funcionario funci = instanciandoFuncionario(rs,dep);
+							
 				return funci;
 		      }
 			  return null;
@@ -77,6 +68,24 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		}
 	}			
 		
+	private Funcionario instanciandoFuncionario(ResultSet rs, Departamento dep) throws SQLException {
+		Funcionario funci = new Funcionario();
+		funci.setId(rs.getInt("Id"));
+		funci.setNome(rs.getString("Nome"));
+		funci.setEmail(rs.getString("Email"));
+		funci.setDataNascimento(rs.getDate("DataNascimento"));
+		funci.setSalarioBase(rs.getDouble("SalarioBase"));
+		funci.setDepartamento(dep);
+		return funci;
+	}
+
+	private Departamento instanciandoDepartamento(ResultSet rs) throws SQLException {
+		Departamento dep = new Departamento();
+		dep.setId(rs.getInt("IdDepartamento"));
+		dep.setNome(rs.getString("DepNome"));
+		return dep;
+	}
+
 	@Override
 	public List<Funcionario> findAll() {
 		// TODO Auto-generated method stub

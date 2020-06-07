@@ -16,6 +16,7 @@ public class Programa {
 	
 	FuncionarioDao funciDao = FabricaDao.creataFuncionarioDao();
  	Funcionario funci = funciDao.findById(2);
+ 	System.out.println("========TESTE01 - Funcionário FindById=========");
  	System.out.println(funci);
 
 	}
