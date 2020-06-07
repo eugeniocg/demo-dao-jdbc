@@ -5,7 +5,7 @@ import modelo.entidades.Funcionario;
 
 public interface FuncionarioDao {
 
-	void inser(Funcionario objeto);
+	void insert(Funcionario objeto);
 	void update(Funcionario objeto);
 	void deleteById(Integer id);
 	Funcionario findById(Integer id);

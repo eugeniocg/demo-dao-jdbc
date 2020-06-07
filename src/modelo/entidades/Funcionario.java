@@ -9,8 +9,8 @@ public class Funcionario implements Serializable {
 	private Integer id;
 	private String nome;
 	private String email;
-	private Date DataNascimento;
-	private Double SalarioBase;
+	private Date dataNascimento;
+	private Double salarioBase;
 	
 	private Departamento departamento;
 	
@@ -22,8 +22,8 @@ public class Funcionario implements Serializable {
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
-		DataNascimento = dataNascimento;
-		SalarioBase = salarioBase;
+		this.dataNascimento = dataNascimento;
+		this.salarioBase = salarioBase;
 		this.departamento = departamento;
 	}
 
@@ -52,19 +52,19 @@ public class Funcionario implements Serializable {
 	}
 
 	public Date getDataNascimento() {
-		return DataNascimento;
+		return dataNascimento;
 	}
 
 	public void setDataNascimento(Date dataNascimento) {
-		DataNascimento = dataNascimento;
+		this.dataNascimento = dataNascimento;
 	}
 
 	public Double getSalarioBase() {
-		return SalarioBase;
+		return salarioBase;
 	}
 
 	public void setSalarioBase(Double salarioBase) {
-		SalarioBase = salarioBase;
+		this.salarioBase = salarioBase;
 	}
 
 	public Departamento getDepartamento() {
@@ -102,7 +102,7 @@ public class Funcionario implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Funcionario [id=" + id + ", nome=" + nome + ", email=" + email + ", DataNascimento=" + DataNascimento
-				+ ", SalarioBase=" + SalarioBase + ", departamento=" + departamento + "]";
+		return "Funcionario [id=" + id + ", nome=" + nome + ", email=" + email + ", DataNascimento=" + dataNascimento
+				+ ", SalarioBase=" + salarioBase + ", departamento=" + departamento + "]";
 	}
 }
