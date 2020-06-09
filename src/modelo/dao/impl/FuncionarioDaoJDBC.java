@@ -92,7 +92,25 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement("DELETE FROM funcionarios WHERE Id = ?");
+			
+			st.setInt(1, id);
+			int linha = st.executeUpdate();
+			if (linha==0) {
+				System.out.println("Código Inexistente");
+			}
+			else {
+				System.out.println("Código foi Excluído com SUCESSO!");
+			}
+		}
+		catch(SQLException ex) {
+			throw new DbException(ex.getMessage());
+		}
+		finally {
+			DB.fechaStatement(st);
+		}
 
 	}
 

@@ -3,6 +3,8 @@ package Aplicacao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
+
 import modelo.dao.FabricaDao;
 import modelo.dao.FuncionarioDao;
 import modelo.entidades.Departamento;
@@ -16,7 +18,9 @@ public class Programa {
 //	Funcionario funci =new Funcionario(10, "Jupi", "jupi@gmail.com", new Date(), 1000.0, objeto);
 //	System.out.println(objeto);
 //	System.out.println(funci);
-
+		
+		Scanner sc = new Scanner(System.in);
+		
 		FuncionarioDao funciDao = FabricaDao.creataFuncionarioDao();
 		Funcionario funci = funciDao.findById(2);
 		System.out.println("========TESTE01 - Funcionário FindById=========");
@@ -47,5 +51,12 @@ public class Programa {
 		funci.setEmail("chiquinho@gmail.com");
 		funciDao.update(funci);
 		System.out.println("Atualização Completada");
+		
+		System.out.println("\n====TESTE06 - Funcionario delete=====");
+		System.out.print("Informe o Código do Funcionário: ");
+		int id = sc.nextInt();
+		funciDao.deleteById(id);
+		
+		
 	}
 }
