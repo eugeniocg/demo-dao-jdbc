@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +26,41 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 
 	@Override
 	public void insert(Funcionario objeto) {
-		// TODO Auto-generated method stub
-
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(
+				"INSERT INTO funcionarios "
+                +"(Nome, Email, DataNascimento, SalarioBase, IdDepartamento) "
+                +"VALUES "
+                +"(?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS);
+			
+			st.setString(1, objeto.getNome());
+			st.setString(2, objeto.getEmail());
+			st.setDate(3, new java.sql.Date(objeto.getDataNascimento().getTime()));
+			st.setDouble(4, objeto.getSalarioBase());
+			st.setInt(5, objeto.getDepartamento().getId());
+			
+			int linhasAfetadas=st.executeUpdate();
+			
+			if(linhasAfetadas>0) {
+				ResultSet rs =st.getGeneratedKeys();
+				if(rs.next()) {
+					int id = rs.getInt(1);
+					objeto.setId(id);
+				}
+				DB.fechaResultSet(rs);
+			}
+			else {
+				throw new DbException("Erro inesperado, nenhuma linha foi incluída");
+			}
+		} 
+		catch(SQLException ex){
+			throw new DbException(ex.getMessage());
+			
+		}finally {
+			DB.fechaStatement(st);
+		}
 	}
 
 	@Override
@@ -46,11 +80,9 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conexao.prepareStatement(
-					"SELECT funcionarios.*,departamentos.Nome as DepNome "
+			st = conexao.prepareStatement("SELECT funcionarios.*,departamentos.Nome as DepNome "
 					+ "FROM funcionarios INNER JOIN departamentos "
-					+ "ON funcionarios.IdDepartamento = departamentos.Id "
-					+ "WHERE funcionarios.Id = ?");
+					+ "ON funcionarios.IdDepartamento = departamentos.Id " + "WHERE funcionarios.Id = ?");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
@@ -64,8 +96,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 			return null;
 		} catch (SQLException ex) {
 			throw new DbException(ex.getMessage());
-		} 
-		finally {
+		} finally {
 			DB.fechaStatement(st);
 			DB.fechaResultSet(rs);
 		}
@@ -94,36 +125,33 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st=conexao.prepareStatement(
-					"SELECT funcionarios.*,departamentos.Nome as DepNome "
-					+"FROM funcionarios INNER JOIN departamentos "
-					+"ON funcionarios.IdDepartamento = departamentos.Id "
-					+"ORDER BY Nome");
-			
-			rs=st.executeQuery();
-			
+			st = conexao.prepareStatement("SELECT funcionarios.*,departamentos.Nome as DepNome "
+					+ "FROM funcionarios INNER JOIN departamentos "
+					+ "ON funcionarios.IdDepartamento = departamentos.Id " + "ORDER BY Nome");
+
+			rs = st.executeQuery();
+
 			List<Funcionario> lista = new ArrayList<>();
 			Map<Integer, Departamento> map = new HashMap<>();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				Departamento dep = map.get(rs.getInt("IdDepartamento"));
-				
-				if (dep==null) {
+
+				if (dep == null) {
 					dep = instanciandoDepartamento(rs);
-					map.put(rs.getInt("IdDepartamento"),dep);
+					map.put(rs.getInt("IdDepartamento"), dep);
 				}
-			
-				Funcionario funci = instanciandoFuncionario(rs,dep);
+
+				Funcionario funci = instanciandoFuncionario(rs, dep);
 				lista.add(funci);
-		  }
-		  return lista;
+			}
+			return lista;
 		} catch (SQLException ex) {
 			throw new DbException(ex.getMessage());
-		} 
-		finally {
+		} finally {
 			DB.fechaStatement(st);
 			DB.fechaResultSet(rs);
-		}	
+		}
 	}
 
 	@Override
@@ -131,35 +159,32 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st=conexao.prepareStatement(
-					"SELECT funcionarios.*,departamentos.Nome as DepNome "
-					+"FROM funcionarios INNER JOIN departamentos "
-					+"ON funcionarios.IdDepartamento = departamentos.Id "
-					+"WHERE IdDepartamento = ? "
-					+"ORDER BY Nome");
-			
+			st = conexao.prepareStatement("SELECT funcionarios.*,departamentos.Nome as DepNome "
+					+ "FROM funcionarios INNER JOIN departamentos "
+					+ "ON funcionarios.IdDepartamento = departamentos.Id " + "WHERE IdDepartamento = ? "
+					+ "ORDER BY Nome");
+
 			st.setInt(1, departamento.getId());
-			rs=st.executeQuery();
-			
+			rs = st.executeQuery();
+
 			List<Funcionario> lista = new ArrayList<>();
 			Map<Integer, Departamento> map = new HashMap<>();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				Departamento dep = map.get(rs.getInt("IdDepartamento"));
-				
-				if (dep==null) {
+
+				if (dep == null) {
 					dep = instanciandoDepartamento(rs);
-					map.put(rs.getInt("IdDepartamento"),dep);
+					map.put(rs.getInt("IdDepartamento"), dep);
 				}
-			
-				Funcionario funci = instanciandoFuncionario(rs,dep);
+
+				Funcionario funci = instanciandoFuncionario(rs, dep);
 				lista.add(funci);
-		  }
-		  return lista;
+			}
+			return lista;
 		} catch (SQLException ex) {
 			throw new DbException(ex.getMessage());
-		} 
-		finally {
+		} finally {
 			DB.fechaStatement(st);
 			DB.fechaResultSet(rs);
 		}

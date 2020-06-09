@@ -1,7 +1,8 @@
 package Aplicacao;
 
-import java.util.List;
 
+import java.util.Date;
+import java.util.List;
 import modelo.dao.FabricaDao;
 import modelo.dao.FuncionarioDao;
 import modelo.entidades.Departamento;
@@ -33,6 +34,11 @@ public class Programa {
 		for (Funcionario objeto : lista) {
 			System.out.println(objeto);
 		}
+		
+		System.out.println("\n====TESTE04 - Funcionario insert=====");
+		Funcionario novoFuncionario = new Funcionario(null, "João","joao@gmail.com", new Date(), 1000.0, departamento);
+				funciDao.insert(novoFuncionario);
+				System.out.println("Inserido novo Id: "+novoFuncionario.getId());
+		}
 	}
-	
-}
+
