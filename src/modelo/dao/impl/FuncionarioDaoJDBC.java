@@ -91,8 +91,39 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 
 	@Override
 	public List<Funcionario> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st=conexao.prepareStatement(
+					"SELECT funcionarios.*,departamentos.Nome as DepNome "
+					+"FROM funcionarios INNER JOIN departamentos "
+					+"ON funcionarios.IdDepartamento = departamentos.Id "
+					+"ORDER BY Nome");
+			
+			rs=st.executeQuery();
+			
+			List<Funcionario> lista = new ArrayList<>();
+			Map<Integer, Departamento> map = new HashMap<>();
+			
+			while(rs.next()) {
+				Departamento dep = map.get(rs.getInt("IdDepartamento"));
+				
+				if (dep==null) {
+					dep = instanciandoDepartamento(rs);
+					map.put(rs.getInt("IdDepartamento"),dep);
+				}
+			
+				Funcionario funci = instanciandoFuncionario(rs,dep);
+				lista.add(funci);
+		  }
+		  return lista;
+		} catch (SQLException ex) {
+			throw new DbException(ex.getMessage());
+		} 
+		finally {
+			DB.fechaStatement(st);
+			DB.fechaResultSet(rs);
+		}	
 	}
 
 	@Override

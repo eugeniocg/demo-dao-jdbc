@@ -27,5 +27,12 @@ public class Programa {
 		for (Funcionario objeto : lista) {
 			System.out.println(objeto);
 		}
+		
+		System.out.println("\n====TESTE03 - Funcionario findAll=====");
+		lista = funciDao.findAll();
+		for (Funcionario objeto : lista) {
+			System.out.println(objeto);
+		}
 	}
+	
 }
