@@ -65,8 +65,29 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 
 	@Override
 	public void update(Funcionario objeto) {
-		// TODO Auto-generated method stub
-
+		PreparedStatement st = null;
+		try {
+			st = conexao.prepareStatement(
+				"UPDATE funcionarios "
+                +" SET Nome=?, Email=?, DataNascimento=?, SalarioBase=?, IdDepartamento=? "
+                +"WHERE Id=?");
+			
+			st.setString(1, objeto.getNome());
+			st.setString(2, objeto.getEmail());
+			st.setDate(3, new java.sql.Date(objeto.getDataNascimento().getTime()));
+			st.setDouble(4, objeto.getSalarioBase());
+			st.setInt(5, objeto.getDepartamento().getId());
+			st.setInt(6, objeto.getId());
+			
+			st.executeUpdate();
+			
+		} 
+		catch(SQLException ex){
+			throw new DbException(ex.getMessage());
+			
+		}finally {
+			DB.fechaStatement(st);
+		}
 	}
 
 	@Override
