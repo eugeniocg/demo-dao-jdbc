@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import db.DB;
 import db.DbException;
 import modelo.dao.FuncionarioDao;
@@ -21,7 +20,7 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 	private Connection conexao;
 
 	public FuncionarioDaoJDBC(Connection conexao) {
-		this.conexao = DB.abreConexao();
+		this.conexao = conexao;
 	}
 
 	@Override
@@ -198,9 +197,11 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conexao.prepareStatement("SELECT funcionarios.*,departamentos.Nome as DepNome "
+			st = conexao.prepareStatement(
+					"SELECT funcionarios.*,departamentos.Nome as DepNome "
 					+ "FROM funcionarios INNER JOIN departamentos "
-					+ "ON funcionarios.IdDepartamento = departamentos.Id " + "WHERE IdDepartamento = ? "
+					+ "ON funcionarios.IdDepartamento = departamentos.Id "
+					+ "WHERE IdDepartamento = ? "
 					+ "ORDER BY Nome");
 
 			st.setInt(1, departamento.getId());
@@ -211,7 +212,6 @@ public class FuncionarioDaoJDBC implements FuncionarioDao {
 
 			while (rs.next()) {
 				Departamento dep = map.get(rs.getInt("IdDepartamento"));
-
 				if (dep == null) {
 					dep = instanciandoDepartamento(rs);
 					map.put(rs.getInt("IdDepartamento"), dep);

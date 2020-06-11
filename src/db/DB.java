@@ -2,6 +2,7 @@ package db;
 
 import java.io.FileInputStream;
 
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,18 +13,7 @@ import java.util.Properties;
 
 public class DB {
 	
-	public static Properties lerPropriedades() {
-		try( FileInputStream fs = new FileInputStream("db.properties")){
-			Properties props = new Properties();
-			props.load(fs);
-			return props;
-		}
-		catch(IOException ex) {
-			throw new DbException(ex.getMessage());
-		}
-	}
-	
-	public static Connection conexao = null;
+public static Connection conexao = null;
 	
 	public static Connection abreConexao() {                         //Abertura da conexão com o BD
 		if(conexao ==null) {
@@ -37,6 +27,17 @@ public class DB {
 			}
 		}
 		return conexao;
+	}
+	
+	public static Properties lerPropriedades() {
+		try( FileInputStream fs = new FileInputStream("db.properties")){
+			Properties props = new Properties();
+			props.load(fs);
+			return props;
+		}
+		catch(IOException ex) {
+			throw new DbException(ex.getMessage());
+		}
 	}
 	
 	public static void fechaConexao() {                              //Fecha a conexão com o BD

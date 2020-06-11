@@ -10,7 +10,7 @@ import modelo.dao.FuncionarioDao;
 import modelo.entidades.Departamento;
 import modelo.entidades.Funcionario;
 
-public class Programa {
+public class TesteFuncionario {
 
 	public static void main(String[] args) {
 
@@ -21,7 +21,7 @@ public class Programa {
 		
 		Scanner sc = new Scanner(System.in);
 		
-		FuncionarioDao funciDao = FabricaDao.creataFuncionarioDao();
+		FuncionarioDao funciDao = FabricaDao.createFuncionarioDao();
 		Funcionario funci = funciDao.findById(2);
 		System.out.println("========TESTE01 - Funcionário FindById=========");
 		System.out.println(funci);
